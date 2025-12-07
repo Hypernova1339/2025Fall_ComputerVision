@@ -1,0 +1,12 @@
+# YOLO dataset config for Jinx W VFX detection
+path: data
+train: images/train
+val: images/val
+
+names:
+  0: jinx_w_projectile
+  1: jinx_w_impact
+
+# Optional stretch goals (uncomment when labeled)
+# 2: jinx_r_projectile
+# 3: jinx_r_impact

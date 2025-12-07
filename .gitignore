@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+*.pyo
+*.DS_Store
+.env
+.venv/
+.idea/
+.vscode/
+
+# Data and outputs
+data/
+!data/.gitkeep
+outputs/
+!outputs/.gitkeep
+runs/
+
+# Checkpoints and weights
+*.pt
+*.onnx
+
+# Logs
+logs/
+*.log
