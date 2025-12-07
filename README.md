@@ -40,19 +40,32 @@ Computer vision project skeleton for detecting League of Legends champion abilit
    Save labels into `data/labels/train`. Move ~10% to `val` for validation.
    See `docs/labeling_protocol_jinx_w.md` for a fast triage-first workflow.
 
-## Training
-Example training run with Ultralytics YOLO:
+## Verify dataset structure (optional sanity check)
 ```
-python src/training/train.py --config configs/jinx_w.yaml --epochs 50 --imgsz 640 --batch 16
+python src/data/verify_dataset.py --images data/images/train --labels data/labels/train --names-file configs/jinx_w.yaml
 ```
-Outputs (weights, logs) land in `outputs/` by default.
 
-## Inference
-Run inference on an image folder or video:
+## Block 2 — Train the detector
+Run YOLO training (defaults to `runs/detect/train/weights/best.pt`):
 ```
-python src/inference/predict.py --weights outputs/jinx_w.pt --source data/images/val --save-dir outputs/preds
+python src/jinx_w_pipeline.py train \
+  --data-config configs/jinx_w.yaml \
+  --epochs 50 \
+  --imgsz 640 \
+  --model-size yolov8n.pt
 ```
-This writes predictions to `outputs/preds`.
+Outputs: `runs/detect/train/weights/best.pt`, results plots, metrics.
+
+## Block 3 — Inference + events
+Generate overlay video and VFX events from a gameplay clip:
+```
+python src/jinx_w_pipeline.py infer \
+  --weights runs/detect/train/weights/best.pt \
+  --video gameplay.mp4 \
+  --out-video outputs/jinx_w_overlay.mp4 \
+  --out-events outputs/jinx_w_events.jsonl
+```
+Events log includes cast time, hit/no-hit (based on impact near projectile end), and screen location. Overlay video is copied to `outputs/jinx_w_overlay.mp4`.
 
 ## Extending
 - Add more abilities or champions: create a new data config in `configs/`, add class names, and collect labels.

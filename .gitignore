@@ -7,16 +7,6 @@ __pycache__/
 .idea/
 .vscode/
 
-# Data and outputs
-data/
-!data/.gitkeep
-outputs/
-!outputs/.gitkeep
-runs/
-
-# Checkpoints and weights
-*.pt
-*.onnx
 
 # Logs
 logs/
