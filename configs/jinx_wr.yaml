@@ -1,0 +1,11 @@
+# YOLO dataset config for Jinx W/R VFX detection
+path: ../data/dataset_yolo
+train: images/train
+val: images/val
+
+names:
+  0: JINX_W_PROJECTILE
+  1: JINX_W_IMPACT
+  2: JINX_R_PROJECTILE
+  3: JINX_R_IMPACT
+
