@@ -1,0 +1,26 @@
+<annotation>
+	<folder>filtered_frames</folder>
+	<filename>frame_00143.jpg</filename>
+	<path>/Users/v4xch4ckking/Downloads/School Path/Fall 25 Path/Computer Vision/Project/2025Fall_ComputerVision/data/filtered_frames/frame_00143.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>1738</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>JINX_W_PROJECTILE</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>152</xmin>
+			<ymin>338</ymin>
+			<xmax>1575</xmax>
+			<ymax>927</ymax>
+		</bndbox>
+	</object>
+</annotation>

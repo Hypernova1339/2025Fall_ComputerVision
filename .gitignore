@@ -9,6 +9,9 @@ __pycache__/
 
 # Data and outputs
 !data/.gitkeep
+data/raw_videos
+data/working_frames
+data/filtered_frames
 outputs/
 !outputs/.gitkeep
 runs/
