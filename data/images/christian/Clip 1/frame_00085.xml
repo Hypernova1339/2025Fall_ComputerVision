@@ -1,0 +1,26 @@
+<annotation>
+	<folder>train</folder>
+	<filename>frame_00085.jpg</filename>
+	<path>/Users/christianherren/Documents/GitHub/2025Fall_ComputerVision/data/images/train/frame_00085.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>1964</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>LABEL_W_IMPACT</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>987</xmin>
+			<ymin>131</ymin>
+			<xmax>1338</xmax>
+			<ymax>480</ymax>
+		</bndbox>
+	</object>
+</annotation>

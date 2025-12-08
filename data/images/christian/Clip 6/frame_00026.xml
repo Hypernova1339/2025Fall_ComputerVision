@@ -1,0 +1,26 @@
+<annotation>
+	<folder>train</folder>
+	<filename>frame_00026.jpg</filename>
+	<path>/Users/christianherren/Documents/GitHub/2025Fall_ComputerVision/data/images/train/frame_00026.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>1964</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>JINX_W_PROJECTILE</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1534</xmin>
+			<ymin>380</ymin>
+			<xmax>1782</xmax>
+			<ymax>756</ymax>
+		</bndbox>
+	</object>
+</annotation>

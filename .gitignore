@@ -8,7 +8,7 @@ __pycache__/
 .vscode/
 
 # Data and outputs
-raw_videos/
+data/raw_videos/
 outputs/
 !outputs/.gitkeep
 runs/
