@@ -1,6 +1,11 @@
 1. YOLO model training notebook, model weight is under `./yolo`.
+
 2. Use `Minimap_generator_tryout` to try minimap generate, it uses `minimap_generator.py`
-3. Use `ytb_video_download_tryout` for video download, it uses `ytb_video_download_script.py`. 
+
+3. Use `ytb_video_download_tryout.ipynb` for video download, it uses `ytb_video_download_script.py`. 
    Useful to download test videos for usage in `YOLO_ByteTrack_Tracker.ipynb`
+
 4. Use `YOLO_ByteTrack_Tracker.ipynb` to use yolo model for detection and tracking. API for JSON output is included.
+   (Run the cell in `ytb_video_download_tryout.ipynb` to get a video test case first)
+
 5. Probably need to use pip to download missing modules. 
