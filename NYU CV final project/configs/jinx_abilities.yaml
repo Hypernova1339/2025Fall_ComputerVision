@@ -1,0 +1,37 @@
+# YOLO Dataset Configuration for Jinx Ability Detection
+# Used by Ultralytics YOLOv8 for training and validation
+
+# Dataset paths (relative to this config file location)
+path: ../data
+train: images/train
+val: images/val
+test: images/val  # Using val as test for now
+
+# Number of classes (explicit for clarity)
+nc: 5
+
+# Class definitions
+# 5 classes for Jinx detection (idle state + ability visual effects)
+names:
+  0: JINX_IDLE           # Jinx character when not using abilities
+  1: VFX_W_PROJECTILE    # Zap! laser beam traveling through the air
+  2: VFX_W_IMPACT        # Zap! hit effect when striking a target
+  3: VFX_R_ROCKET        # Super Mega Death Rocket in flight
+  4: VFX_R_IMPACT        # Rocket explosion visual effect
+
+# Class metadata (for reference, not used by YOLO)
+# IDLE:
+#   - Jinx character model when not casting abilities
+#   - Used to track champion position
+#
+# W (Zap!):
+#   - Projectile: Long, narrow beam with electric/energy visual
+#   - Impact: Sparking/electric hit effect on target
+#   - Typical duration: ~0.5-1.5s from cast to impact
+#
+# R (Super Mega Death Rocket):
+#   - Rocket: Large missile projectile, grows in size over distance
+#   - Impact: Large explosion effect
+#   - Typical duration: 0.5-8s+ depending on distance (global ultimate)
+
+

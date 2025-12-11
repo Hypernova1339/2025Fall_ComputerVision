@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jinx-ability-detection"
+version = "0.1.0"
+description = "Computer vision system for detecting Jinx abilities (W and R) in League of Legends gameplay"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "NYU CV Final Project"}
+]
+keywords = ["computer-vision", "yolo", "league-of-legends", "object-detection"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "ultralytics>=8.0.0",
+    "torch>=2.0.0",
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "tqdm>=4.65.0",
+    "pyyaml>=6.0",
+    "click>=8.1.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+notebooks = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+    "seaborn>=0.12.0",
+]
+
+[project.scripts]
+jinx-extract-clips = "tools.make_event_clips:main"
+jinx-extract-frames = "tools.extract_frames:main"
+jinx-split-data = "tools.split_train_val:main"
+jinx-verify = "tools.verify_dataset:main"
+jinx-train = "src.training.train_yolo:main"
+jinx-infer = "tools.run_inference:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "tools*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+
+
+
+

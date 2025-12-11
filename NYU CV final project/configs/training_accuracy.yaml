@@ -1,0 +1,104 @@
+# =============================================================================
+# ACCURACY-OPTIMIZED Training Configuration for Jinx Ability Detection
+# =============================================================================
+# Use this config for best possible detection accuracy.
+# Trade-off: Longer training time for higher mAP and better rare class detection.
+#
+# Usage:
+#   python src/training/train_yolo.py \
+#       --data configs/jinx_abilities.yaml \
+#       --config configs/training_accuracy.yaml \
+#       --name jinx_accurate
+#
+# Expected training time: ~1-2 hours on MPS/GPU
+# Target mAP50: 70-85% (depending on data quality)
+# =============================================================================
+
+# Model Configuration
+model:
+  base: yolov8s.pt      # Small model - better accuracy than nano
+  nc: 5                 # 5 classes: IDLE, W_PROJ, W_IMPACT, R_ROCKET, R_IMPACT
+  dropout: 0.1          # Light dropout for regularization
+
+# Training Hyperparameters (accuracy-optimized)
+training:
+  epochs: 150           # More epochs for thorough training
+  batch_size: 16        # Standard batch size
+  image_size: 640       # Full resolution - important for small projectiles
+  patience: 30          # More patience - allow model to fully converge
+  
+  # Optimizer (tuned for accuracy)
+  optimizer: AdamW      # AdamW often better for fine-tuning
+  learning_rate: 0.001  # Lower lr for more stable training
+  weight_decay: 0.0005
+  momentum: 0.937
+  
+  # Learning rate scheduler
+  lr_scheduler: cosine
+  warmup_epochs: 5      # Longer warmup for stability
+  warmup_momentum: 0.8
+
+# Optimizations
+optimizations:
+  cache: true           # Cache images in RAM
+  workers: 4            # Optimal for Mac
+  rect: false           # Disable rect - use full augmentation
+  cos_lr: true          # Cosine LR annealing
+  close_mosaic: 15      # Keep mosaic longer for better augmentation
+  amp: true             # Mixed precision
+
+# Data Augmentation (tuned for LoL VFX detection)
+# Key insight: VFX are bright, colorful, and size-sensitive
+augmentation:
+  # Color augmentation (reduced - VFX colors are distinctive)
+  hsv_h: 0.01           # Minimal hue shift - ability colors matter
+  hsv_s: 0.5            # Moderate saturation - preserve VFX brightness
+  hsv_v: 0.3            # Moderate value - preserve VFX visibility
+  
+  # Geometric (conservative - game UI is fixed)
+  degrees: 0.0          # No rotation - game UI doesn't rotate
+  translate: 0.15       # Moderate translation
+  scale: 0.3            # Reduced scale - small projectiles are important
+  shear: 0.0            # No shear - would distort projectiles
+  perspective: 0.0      # No perspective - game camera is fixed
+  
+  # Flips
+  flipud: 0.0           # No vertical flip - game doesn't flip vertically
+  fliplr: 0.5           # Horizontal flip - game is symmetric
+  
+  # Advanced augmentation
+  mosaic: 0.5           # Reduced from 1.0 - preserve small object integrity
+  mixup: 0.1            # Light mixup for regularization
+  copy_paste: 0.3       # Enable copy-paste - helps with rare classes!
+  erasing: 0.0          # Disabled - don't erase small VFX
+
+# Validation
+validation:
+  val_interval: 1       # Validate every epoch
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+
+# Output
+output:
+  project: runs/detect
+  name: jinx_accurate
+  save_period: 10
+  plots: true
+
+# =============================================================================
+# NOTES ON CLASS IMBALANCE
+# =============================================================================
+# Current dataset has severe imbalance:
+#   - VFX_W_PROJECTILE: ~450 samples (dominant)
+#   - VFX_R_IMPACT: ~5 samples (critical shortage!)
+#
+# Recommendations:
+# 1. Use --oversample flag when preparing dataset (tools/prepare_dataset.py)
+# 2. copy_paste=0.3 helps duplicate rare objects
+# 3. Consider collecting more R_IMPACT samples
+# 4. Monitor per-class AP during training, not just overall mAP
+# =============================================================================
+
+
+
+

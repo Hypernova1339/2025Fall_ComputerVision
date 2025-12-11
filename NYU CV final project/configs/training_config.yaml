@@ -1,0 +1,108 @@
+# =============================================================================
+# DEFAULT Training Configuration for Jinx Ability Detection
+# =============================================================================
+# Balanced configuration for general use. For specific optimizations, use:
+#   - configs/training_speed.yaml    (faster training, lower accuracy)
+#   - configs/training_accuracy.yaml (higher accuracy, longer training)
+#
+# Usage:
+#   python src/training/train_yolo.py \
+#       --data configs/jinx_abilities.yaml \
+#       --config configs/training_config.yaml
+# =============================================================================
+
+# Model Configuration
+model:
+  # Base model to fine-tune (yolov8n, yolov8s, yolov8m, yolov8l, yolov8x)
+  # yolov8n: Fastest, good for small datasets
+  # yolov8s: Better accuracy, still fast
+  base: yolov8n.pt
+  # Number of classes (must match jinx_abilities.yaml)
+  nc: 5  # JINX_IDLE, VFX_W_PROJECTILE, VFX_W_IMPACT, VFX_R_ROCKET, VFX_R_IMPACT
+
+# Training Hyperparameters
+training:
+  epochs: 100
+  batch_size: 16
+  image_size: 640       # Standard size, good for detecting small VFX
+  patience: 20          # Early stopping patience
+  
+  # Optimizer
+  optimizer: AdamW      # Good for fine-tuning
+  learning_rate: 0.001  # Lower than default for stability
+  weight_decay: 0.0005
+  momentum: 0.937
+  
+  # Learning rate scheduler
+  lr_scheduler: cosine  # Cosine annealing
+  warmup_epochs: 3
+  warmup_momentum: 0.8
+
+# Optimizations
+optimizations:
+  cache: true           # Cache images in RAM (HIGHLY RECOMMENDED)
+  workers: 4            # Data loader workers (4 is optimal for Mac)
+  rect: false           # Rectangular training (disable for full augmentation)
+  cos_lr: true          # Cosine learning rate
+  close_mosaic: 10      # Disable mosaic for last N epochs
+  amp: true             # Mixed precision training
+
+# Data Augmentation
+# IMPORTANT: Tuned specifically for LoL VFX detection
+# - VFX have distinctive colors (reduce color augmentation)
+# - Projectiles are small (reduce scale augmentation)
+# - Game UI is fixed (no rotation/perspective)
+augmentation:
+  # Color augmentation (REDUCED - VFX colors are distinctive)
+  hsv_h: 0.01           # Minimal hue shift - ability colors are important
+  hsv_s: 0.5            # Moderate saturation - preserve VFX visibility
+  hsv_v: 0.3            # Moderate value - preserve brightness
+  
+  # Geometric transforms
+  degrees: 0.0          # NO rotation - game UI never rotates
+  translate: 0.1        # Slight translation OK
+  scale: 0.3            # REDUCED - small projectiles can disappear with heavy scaling
+  shear: 0.0            # NO shear - would distort projectiles
+  perspective: 0.0      # NO perspective - camera angle is fixed
+  
+  # Flip augmentation
+  flipud: 0.0           # NO vertical flip - game doesn't flip vertically
+  fliplr: 0.5           # Horizontal flip OK - game is symmetric
+  
+  # Advanced augmentation
+  mosaic: 0.5           # REDUCED from 1.0 - preserve small object integrity
+  mixup: 0.0            # Disabled - not helpful for VFX detection
+  copy_paste: 0.0       # Disabled by default (enable in accuracy config)
+  erasing: 0.0          # DISABLED - don't randomly erase small VFX objects
+
+# Validation
+validation:
+  val_interval: 1       # Validate every epoch
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+
+# Output
+output:
+  project: runs/detect
+  name: jinx_abilities
+  save_period: 10       # Save checkpoint every N epochs
+  plots: true           # Generate training plots
+
+# Logging
+logging:
+  verbose: true
+  tensorboard: true
+
+# =============================================================================
+# NOTES
+# =============================================================================
+# Class Imbalance Warning:
+# The dataset has severe class imbalance (w_cast >> r_impact).
+# Consider using:
+#   python tools/prepare_dataset.py --oversample
+# to balance the training set.
+#
+# Device Selection:
+# The training script now auto-detects the best device (CUDA > MPS > CPU).
+# Override with --device flag if needed.
+# =============================================================================

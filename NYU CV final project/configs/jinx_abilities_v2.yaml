@@ -1,0 +1,114 @@
+# YOLO Dataset Configuration for Jinx Ability Detection - V2 (8 Classes)
+# Expanded to include both UI ability bar detection and world VFX detection
+# Used by Ultralytics YOLOv8 for training and validation
+
+# Dataset paths (relative to this config file location)
+path: ../data
+train: images/train
+val: images/val
+
+# 8-Class Detection System
+# --------------------------
+# Classes 0-3: UI Ability Bar (fixed position, cooldown indicators)
+# Classes 4-7: World VFX (projectiles and impacts anywhere on screen)
+
+names:
+  # UI Ability Bar Detection (fixed screen position)
+  # These detect the ability icons' state in the HUD
+  0: UI_W_READY       # W icon available (bright/colorful)
+  1: UI_W_COOLDOWN    # W icon on cooldown (grayed out with timer)
+  2: UI_R_READY       # R icon available (bright/colorful)
+  3: UI_R_COOLDOWN    # R icon on cooldown (grayed out with timer)
+  
+  # World VFX Detection (anywhere on screen)
+  # These detect the actual ability effects in the game world
+  4: VFX_W_PROJECTILE # Zap! laser beam in flight
+  5: VFX_W_IMPACT     # Zap! hit effect (electric spark)
+  6: VFX_R_ROCKET     # Super Mega Death Rocket projectile
+  7: VFX_R_IMPACT     # Rocket explosion effect
+
+# =============================================================================
+# CLASS DESCRIPTIONS
+# =============================================================================
+#
+# UI_W_READY (0):
+#   - W ability icon in the ability bar when available
+#   - Appears bright/colorful (blue-ish for Jinx W)
+#   - Located at fixed screen position (bottom center)
+#   - Small bounding box around the icon
+#
+# UI_W_COOLDOWN (1):
+#   - W ability icon when on cooldown
+#   - Appears grayed out with cooldown number overlay
+#   - Same position as UI_W_READY
+#   - Transition from READY to COOLDOWN = ability was cast
+#
+# UI_R_READY (2):
+#   - R (ultimate) ability icon when available
+#   - Appears bright/colorful
+#   - To the right of W icon in ability bar
+#
+# UI_R_COOLDOWN (3):
+#   - R ability icon when on cooldown
+#   - Grayed out with cooldown timer
+#   - R cooldowns are longer (90-120+ seconds at rank 1)
+#
+# VFX_W_PROJECTILE (4):
+#   - The Zap! (W) laser beam traveling through the air
+#   - Long, narrow, electric/energy appearance
+#   - Moves fast but visible for ~0.5-1.5 seconds
+#   - Draw elongated bounding box around the beam
+#
+# VFX_W_IMPACT (5):
+#   - The hit effect when Zap! connects with a target
+#   - Electric spark/stun visual
+#   - Appears briefly at point of contact
+#   - Relatively small bounding box
+#
+# VFX_R_ROCKET (6):
+#   - The Super Mega Death Rocket projectile
+#   - Large missile that grows as it travels
+#   - Can be visible for 0.5-8+ seconds (global ult)
+#   - Draw box around rocket body (not trail)
+#
+# VFX_R_IMPACT (7):
+#   - The explosion when the rocket hits
+#   - Large, bright explosion effect
+#   - Draw box around entire explosion area
+#
+# =============================================================================
+# LABELING STRATEGY
+# =============================================================================
+#
+# Option A: UI-only training (simpler)
+#   - Only label classes 0-3 (UI icons)
+#   - Faster to label (fixed positions)
+#   - Useful for auto-detecting cast times
+#
+# Option B: VFX-only training (original approach)
+#   - Only label classes 4-7 (world VFX)
+#   - More complex but directly detects abilities
+#
+# Option C: Combined training (recommended)
+#   - Label all 8 classes
+#   - UI detection provides cast timing
+#   - VFX detection confirms ability in game world
+#   - Most robust but requires more labeling
+#
+# =============================================================================
+# DETECTION PIPELINE
+# =============================================================================
+#
+# Frame → [UI Detection] → Detect state changes (READY → COOLDOWN)
+#                       ↓
+#                 Cast timestamp logged
+#                       ↓
+#      → [VFX Detection] → Detect projectile/impact
+#                       ↓
+#                 Confirm cast, detect hit/miss
+#
+
+
+
+
+
