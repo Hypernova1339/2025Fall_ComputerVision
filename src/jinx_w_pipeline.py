@@ -164,6 +164,7 @@ def track_projectiles_and_impacts(
             "is_hit_vfx": hit is not None,
             "hit_time_sec": (hit.frame_idx / fps) if hit else None,
             "hit_location_screen": hit.center if hit else None,
+            "impact_target": "unknown" if hit else None,  # placeholder; requires additional target classifier
             "source": ["VFX_DETECTOR"],
             "track_len_frames": len(track.detections),
         }
